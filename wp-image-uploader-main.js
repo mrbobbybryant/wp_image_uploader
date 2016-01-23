@@ -14,12 +14,14 @@ var imageUploader = function() {
     var imgElement;
     var mainDiv;
     var customUploader;
+    var uploaderKey;
 
     var init = function( id, type, title ) {
         addButtonText =  title.addButton = typeof title.addButton !== 'undefined' ? title.addButton : 'Add Image';
         deleteButtonText = title.deleteButton = typeof title.deleteButton !== 'undefined' ? title.deleteButton : 'Remove Image';
         modalTitle = title.modalTitle = typeof title.modalTitle !== 'undefined' ? title.modalTitle : 'Select or Upload Media';
         modalButtonText = title.modalButtonText = typeof title.modalButtonText !== 'undefined' ? title.modalButtonText : 'Use this media';
+        uploaderKey = id;
 
         customUploader = wp.media({
             title: modalTitle,
@@ -45,6 +47,7 @@ var imageUploader = function() {
         addButton.addEventListener( 'click', imgUploadCallback );
         customUploader.on( 'select', addImage );
         deleteElement.addEventListener( 'click', deleteImage );
+        window.addEventListener('DOMContentLoaded', setInitialState );
     };
 
     var createUploadElement = function( id, type ) {
@@ -60,6 +63,11 @@ var imageUploader = function() {
         var hidden = document.createElement( 'input' );
         hidden.setAttribute( 'type', 'hidden' );
         hidden.setAttribute( 'id', id + '-hidden-field' );
+        hidden.setAttribute( 'name', id + '-hidden-field' );
+
+        var secret = document.createElement( 'div' );
+        secret.innerHTML = wpImageUploader.security;
+        secret.style.display = "none";
 
         if ( 'button' === type ) {
             addButton = document.createElement( 'input' );
@@ -89,7 +97,9 @@ var imageUploader = function() {
             deleteButton.style.display = "none";
         }
 
+
         mainDiv.appendChild( img );
+        mainDiv.appendChild( secret );
         mainDiv.appendChild( hidden );
         mainDiv.appendChild( addButton );
         mainDiv.appendChild( deleteButton );
@@ -109,7 +119,7 @@ var imageUploader = function() {
     var addImage = function(event) {
         var attachment = customUploader.state().get('selection').first().toJSON();
         imgElement.setAttribute( 'src', attachment.url );
-        hiddenElement.setAttribute( 'value', [{id: attachment.id, url: attachment.url}] );
+        hiddenElement.setAttribute( 'value', JSON.stringify( [{ id: attachment.id, src: attachment.url }]) );
         toggleVisibity( 'ADD' );
     };
 
@@ -133,6 +143,24 @@ var imageUploader = function() {
         }
     };
 
+    var findImageUploadData = function() {
+        return wpImageUploader.uploadKeys.filter( function(data) {
+            return data.key === uploaderKey + '-hidden-field';
+        } );
+    };
+
+    var setInitialState = function() {
+        var imgData = findImageUploadData();
+        if ( false === imgData[0].src ) {
+            toggleVisibity( 'DELETE' );
+            return;
+        }
+
+        imgElement.setAttribute( 'src', imgData[0].src );
+        hiddenElement.setAttribute( 'value', JSON.stringify([ imgData[0] ]) );
+        toggleVisibity( 'ADD' );
+    };
+
     return {
         init: init
     }
@@ -140,7 +168,10 @@ var imageUploader = function() {
 
 //TODO remove after testing.
 var uploadOne = imageUploader();
-uploadOne.init( 'image-one', 'link', { addButton: 'Click Me!' } );
+uploadOne.init( 'image-one', 'link', { addButton: 'Click Me!', modalTitle: "New Modal Text" } );
+
+var uploadTwo = imageUploader();
+uploadTwo.init( 'image-two', 'link', {} );
 
 //TODO List
 // 1. Handle Saving
