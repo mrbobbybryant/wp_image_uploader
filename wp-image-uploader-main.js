@@ -144,6 +144,9 @@ var imageUploader = function() {
     };
 
     var findImageUploadData = function() {
+        if ( "" === wpImageUploader.uploadKeys ) {
+            return;
+        }
         return wpImageUploader.uploadKeys.filter( function(data) {
             return data.key === uploaderKey + '-hidden-field';
         } );
@@ -151,6 +154,10 @@ var imageUploader = function() {
 
     var setInitialState = function() {
         var imgData = findImageUploadData();
+        if ( typeof imgData === 'undefined' ) {
+            return;
+        }
+
         if ( false === imgData[0].src ) {
             toggleVisibity( 'DELETE' );
             return;
