@@ -4,6 +4,7 @@
 
 var imageUploader = function() {
 
+
     var modalTitle;
     var modalButtonText;
     var addButtonText;
@@ -16,7 +17,7 @@ var imageUploader = function() {
     var customUploader;
     var uploaderKey;
 
-    var init = function( id, type, title ) {
+    const init = ( id, type, title ) => {
         addButtonText =  title.addButton = typeof title.addButton !== 'undefined' ? title.addButton : 'Add Image';
         deleteButtonText = title.deleteButton = typeof title.deleteButton !== 'undefined' ? title.deleteButton : 'Remove Image';
         modalTitle = title.modalTitle = typeof title.modalTitle !== 'undefined' ? title.modalTitle : 'Select or Upload Media';
@@ -178,7 +179,7 @@ var uploadOne = imageUploader();
 uploadOne.init( 'image-one', 'link', { addButton: 'Click Me!', modalTitle: "New Modal Text" } );
 
 var uploadTwo = imageUploader();
-uploadTwo.init( 'image-two', 'link', {} );
+uploadTwo.init( 'image-two', 'button', {} );
 
 //TODO List
 // 1. Handle Saving
