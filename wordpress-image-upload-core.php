@@ -24,7 +24,7 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\register_admin_scripts' )
 add_action( 'save_post', __NAMESPACE__ . '\save_wp_image_uploads' );
 
 function register_admin_scripts() {
-	wp_enqueue_script( 'wpimgup-main', WPIMGUP_URL . '/src/js/wp-image-uploader-main.js', array('jquery', 'media-upload'), WPIMGUP_VERSION, true );
+	wp_enqueue_script( 'wpimgup-main', WPIMGUP_URL . '/src/wordpress-image-upload.js', array('jquery', 'media-upload'), WPIMGUP_VERSION, true );
 	wp_localize_script( 'wpimgup-main', 'wpImageUploader', array(
 		'security' => wp_nonce_field( basename( __FILE__ ), 'wp_image_uploads' ),
 		'uploadKeys' => fetch_custom_load_metadata()

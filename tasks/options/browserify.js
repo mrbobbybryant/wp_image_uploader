@@ -3,7 +3,7 @@ module.exports = {
         options: {
             transform: [['babelify', {presets: ['es2015']}]]
         },
-        src: ['src/js/src/index.js'],
+        src: ['src/js/**/*.js'],
         dest: 'src/wordpress-image-upload.js'
     }
 };
