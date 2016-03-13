@@ -39,6 +39,13 @@ exports.links = links;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+/**
+* Creates a new DOM Element and sets it's properties.
+* @param {string} type - Determines the DOM Element Type.
+* @param {Array/Object} properties - An array of Objects. Each attribute should
+* be passed as a single object with one property.
+* @return {DOM Element}
+*/
 var createElement = function createElement(type, properties) {
   var element = document.createElement(type);
   properties.map(function (data) {
@@ -48,35 +55,54 @@ var createElement = function createElement(type, properties) {
   return element;
 };
 
+/**
+* Finds DOM Elements by ID.
+* @params {Object} props - We are pulling out a property of the main props Object.
+* @params {string} prefix - the DOM Elements Name Prefix.
+*/
 var cacheElement = function cacheElement(_ref, prefix) {
   var uploaderKey = _ref.uploaderKey;
 
   return document.getElementById(uploaderKey + prefix);
 };
 
+/**
+* Function is Responsible for showing and hidding DOM Elements based on the current,
+* image upload Process.
+* @param {string} action - The current Upload Action: ADD || DELETE
+* @param {object} props - We are extracting properties from the main props Object.
+*/
 var toggleVisibity = function toggleVisibity(action, _ref2) {
   var addButton = _ref2.addButton;
   var deleteElement = _ref2.deleteElement;
   var imgElement = _ref2.imgElement;
 
   if ('ADD' === action) {
-    hidElement(addButton);
+    hideElement(addButton);
     showElement(deleteElement);
     imgElement.style.width = '100%';
   }
 
   if ('DELETE' === action) {
     showElement(addButton);
-    hidElement(deleteElement);
+    hideElement(deleteElement);
     imgElement.style.width = '';
   }
 };
 
+/**
+* Show a DOM Element
+* @param {string} element - The DOM Element you wish to Show.
+*/
 var showElement = function showElement(element) {
   element.setAttribute('style', "display:'';");
 };
 
-var hidElement = function hidElement(element) {
+/**
+* Hide a DOM Element
+* @param {string} element - The DOM Element you wish to Hide.
+*/
+var hideElement = function hideElement(element) {
   element.setAttribute('style', "display:none;");
 };
 
